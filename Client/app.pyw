@@ -9,11 +9,13 @@ username = getpass.getuser() + "@" + socket.gethostname()
 
 soundbox_path = r"C:\Users\quent\Desktop\Perso\CactusVirus\Client\assets\Soundbox\\"
 goose_path = r"C:\Users\quent\Desktop\Perso\CactusVirus\Client\assets\Goose\\"
+flash_path = r"C:\Users\quent\Desktop\Perso\CactusVirus\Client\assets\FlashCoucou\\"
 soundlist = ["nopal-earrape", "passe-partout", "rene-ballek", "tabarnak", "wii-sport", "pauvre-conne", "patrick-ftg", "losing-horn", "titanic"]
+flash_coucou = ["flash-jfp", "flash-blanquer", "flash-michel"]
 
 @io.on("event-launched")
 def event_triggered(event):
-    
+
     print(event)
 
     if event in soundlist:
@@ -27,6 +29,9 @@ def event_triggered(event):
 
     elif event == "kill":
         os.system("taskkill/f /im goosedesktop.exe")
+
+    elif event in flash_coucou:
+        os.system(f"python {flash_path}\FlashCoucou.pyw {flash_path} {event}")
 
 io.connect("http://localhost:3000")
 io.emit("login", username)
