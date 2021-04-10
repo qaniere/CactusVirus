@@ -3,6 +3,7 @@ const app = express();
 const http = require('http');
 const server = http.createServer(app);
 const io = require('socket.io')(server);
+const fs = require("fs");
 
 var loggedUsers = [];
 var username = {};
@@ -25,8 +26,17 @@ function getCurrentTime() {
 }
 
 app.get('/', (req, res) => {
-    res.send('Hello world !')
+    fs.readFile("src/index.html", "utf8" , (err, content) => {
+        if (err) {
+            res.send("Error 500");    
+        } else {
+            console.log("[" + getCurrentTime() + "] Console was accessed");
+            res.send(content);
+        }
+    });
 });
+
+app.use("/file", express.static("src"));
 
 io.on('connection', (socket) => {
 
