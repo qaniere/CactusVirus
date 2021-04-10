@@ -5,8 +5,6 @@ const server = http.createServer(app);
 const io = require('socket.io')(server);
 const fs = require("fs");
 
-var loggedUsers = [];
-var username = {};
 
 function getCurrentTime() {
 
@@ -42,9 +40,11 @@ io.on('connection', (socket) => {
 
     socket.on('login', (event) => {
         console.log('[' + getCurrentTime() + '] "' + event.name + '" has logged in');
-        loggedUsers.push(event.name);
-        username[event.name] = socket;
     });
+
+    socket.on("event-triggered", (event) => {
+        console.log('[' + getCurrentTime() + '] Event "' + event + '" was triggered');
+    })
 
 });
 
