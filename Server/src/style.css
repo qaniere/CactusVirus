@@ -29,8 +29,3 @@ button {
     border-radius: 30px;
     background-color: white;
 }
-
-#form {
-    visibility: hidden;
-    margin-top: 5vh;
-}
