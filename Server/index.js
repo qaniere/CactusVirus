@@ -38,12 +38,13 @@ app.use("/file", express.static("src"));
 
 io.on('connection', (socket) => {
 
-    socket.on('login', (event) => {
-        console.log('[' + getCurrentTime() + '] "' + event.name + '" has logged in');
+    socket.on('login', (username) => {
+        console.log('[' + getCurrentTime() + '] "' + username + '" is listening');
     });
 
     socket.on("event-triggered", (event) => {
         console.log('[' + getCurrentTime() + '] Event "' + event + '" was triggered');
+        io.emit("event-launched", event)
     })
 
 });
