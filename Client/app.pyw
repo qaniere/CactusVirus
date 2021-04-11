@@ -10,8 +10,8 @@ username = getpass.getuser() + "@" + socket.gethostname()
 soundbox_path = r"C:\Users\quent\Desktop\Perso\CactusVirus\Client\assets\Soundbox\\"
 goose_path = r"C:\Users\quent\Desktop\Perso\CactusVirus\Client\assets\Goose\\"
 flash_path = r"C:\Users\quent\Desktop\Perso\CactusVirus\Client\assets\FlashCoucou\\"
-soundlist = ["nopal-earrape", "passe-partout", "rene-ballek", "tabarnak", "wii-sport", "pauvre-conne", "patrick-ftg", "losing-horn", "titanic"]
-flash_coucou = ["flash-jfp", "flash-blanquer", "flash-michel"]
+soundlist = ["nopal-earrape", "passe-partout", "rene-ballek", "tabarnak", "wii-sport", "pauvre-conne", "patrick-ftg", "losing-horn", "titanic", "nani", "meuh", "fbi", "bien-evidement"]
+flash_coucou = ["flash-jfp", "flash-blanquer", "flash-michel", "flash-jpk"]
 
 @io.on("event-launched")
 def event_triggered(event):
