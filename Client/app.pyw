@@ -3,6 +3,7 @@ import socket
 import getpass
 import winsound
 import socketio
+import subprocess
 from gtts import gTTS
 from vendor import playsound
 
@@ -27,13 +28,15 @@ def event_triggered(event):
         winsound.PlaySound(None, winsound.SND_PURGE)
 
     elif event == "spawn":
-        os.system(goose_path + "GooseDesktop.exe")
+        DETACHED_PROCESS = 0x00000008
+        subprocess.call(goose_path + "GooseDesktop.exe", creationflags=DETACHED_PROCESS)
 
     elif event == "kill":
         os.system("taskkill/f /im goosedesktop.exe")
 
     elif event in flash_coucou:
-        os.system(f"python {flash_path}\FlashCoucou.pyw {flash_path} {event}")
+        DETACHED_PROCESS = 0x00000008
+        subprocess.call(f"python {flash_path}\FlashCoucou.pyw {flash_path} {event}", creationflags=DETACHED_PROCESS)
 
     elif "tts\n" in event:
         sentence = event.split("\n")[1]
