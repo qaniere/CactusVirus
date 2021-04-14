@@ -11,37 +11,43 @@
 <body>
     <h1>Cactus Virus</h1>
     <div id="menu-zone">
-        <label>Sound box :</label>
-        <button id="nopal-earrape">Nopal Earrape</button>
-        <button id="passe-partout">Passe partout du fort boyard</button>
-        <button id="rene-ballek">René s'en bat les couilles</button>
-        <button id="tabarnak">Osti de crisse de Tabarnak</button>
-        <button id="wii-sport">Wii Sport Theme</button>
-        <button id="pauvre-conne">Gnagnagnagna pauvre conne</button>
-        <button id="patrick-ftg">Ah si tu pouvais fermer ta gueule</button>
-        <button id="losing-horn">Losing horn</button>
-        <button id="titanic">Titanic Flute Cover</button>
-        <button id="nani">Omae Wa Mou Shindeiru</button>
-        <button id="meuh">Bruit de vache</button>
-        <button id="fbi">FBI Open Up</button>
-        <button id="bien-evidement">Bien évidement !</button>
-        <br> <br>
-        <label>Stopper tout les sons en cours de lecture :</label>
-        <button id="stop">Arrêt des sons</button>
-        <br> <br>
-        <label>Desktop Goose :</label>
-        <button id="spawn">Spawn</button>
-        <button id="kill">Tuer tout</button>
-        <br> <br>
-        <label>Flash coucou :</label>
-        <button id="flash-jfp">Jean-François Provencal</button>
-        <button id="flash-blanquer">Jean-Michel Blanquer</button>
-        <button id="flash-michel">Michel de la compta</button>
-        <button id="flash-jpk">Jean-Pierre Koff</button>
-        <br> <br>
-        <label>Phrase Text-To-Speech :</label>
-        <input type="text" id="tts-sentence"> 
-        <button id="send-tts">Dire la phrase</button>
+        <div id="soundbox" class="zone">
+            <label>Sound box :</label>
+            <button id="nopal-earrape">Nopal Earrape</button>
+            <button id="passe-partout">Passe partout du fort boyard</button>
+            <button id="rene-ballek">René s'en bat les couilles</button>
+            <button id="tabarnak">Osti de crisse de Tabarnak</button>
+            <button id="wii-sport">Wii Sport Theme</button>
+            <button id="pauvre-conne">Gnagnagnagna pauvre conne</button>
+            <button id="patrick-ftg">Ah si tu pouvais fermer ta gueule</button>
+            <button id="losing-horn">Losing horn</button>
+            <button id="titanic">Titanic Flute Cover</button>
+            <button id="nani">Omae Wa Mou Shindeiru</button>
+            <button id="meuh">Bruit de vache</button>
+            <button id="fbi">FBI Open Up</button>
+            <button id="bien-evidement">Bien évidement !</button>
+        </div>
+        <div id="stop-sound-zone" class="zone">
+            <label>Stopper tout les sons en cours de lecture :</label>
+            <button id="stop">Arrêt des sons</button>
+        </div>
+        <div id="desktop-goose-zone" class="zone">
+            <label>Desktop Goose :</label>
+            <button id="spawn">Spawn</button>
+            <button id="kill">Tuer tout</button>
+        </div>
+        <div id="flash-zone" class="zone">
+            <label>Flash coucou :</label>
+            <button id="flash-jfp">Jean-François Provencal</button>
+            <button id="flash-blanquer">Jean-Michel Blanquer</button>
+            <button id="flash-michel">Michel de la compta</button>
+            <button id="flash-jpk">Jean-Pierre Koff</button>
+        </div>
+        <div id="tts-zone" class="zone">
+            <label>Phrase Text-To-Speech :</label>
+            <input type="text" id="tts-sentence"> 
+            <button id="send-tts">Dire la phrase</button>
+        </div>
     </div>
     <script src="https://cdn.socket.io/3.1.3/socket.io.min.js" integrity="sha384-cPwlPLvBTa3sKAgddT6krw0cJat7egBga3DJepJyrLl4Q9/5WLra3rrnMcyTyOnh" crossorigin="anonymous"></script>
     <script src="file/app.js"></script>
