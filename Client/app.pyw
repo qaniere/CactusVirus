@@ -3,6 +3,8 @@ import socket
 import getpass
 import winsound
 import socketio
+from gtts import gTTS
+from vendor import playsound
 
 io = socketio.Client()
 username = getpass.getuser() + "@" + socket.gethostname()
@@ -32,6 +34,14 @@ def event_triggered(event):
 
     elif event in flash_coucou:
         os.system(f"python {flash_path}\FlashCoucou.pyw {flash_path} {event}")
+
+    elif "tts\n" in event:
+        sentence = event.split("\n")[1]
+        tts = gTTS(sentence, lang="fr")
+        tts.save("sentence.mp3")
+        playsound.playsound("sentence.mp3")
+        os.remove("sentence.mp3")
+
 
 io.connect("http://localhost:3000")
 io.emit("login", username)
