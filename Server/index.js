@@ -1,12 +1,17 @@
 const fs = require("fs");
-const ejs = require('ejs');
 const express = require("express");
 const app = express();
 const http = require("http");
 const server = http.createServer(app);
 const io = require("socket.io")(server);
+const basicAuth = require("express-basic-auth");
 
 var usernames = {}
+app.use(basicAuth({
+    users: { "admin": "!blanquer666_2!" },
+    challenge: true
+}))
+
 
 function getCurrentTime() {
 
