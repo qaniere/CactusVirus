@@ -21,6 +21,7 @@ button {
     margin-bottom: 1vh;
 }
 
+
 #menu-zone {
     font-size: 2.5vh;
     width: 75vw;
@@ -35,6 +36,11 @@ button {
     font-size: 2.5vh;
     width: 35vw;
 }
+
+#controls {
+    visibility: hidden;
+}
+
 
 .zone {
     margin-bottom: 1.5vh;

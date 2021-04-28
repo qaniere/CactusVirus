@@ -6,7 +6,8 @@ const server = http.createServer(app);
 const io = require("socket.io")(server);
 const basicAuth = require("express-basic-auth");
 
-var usernames = {}
+var users = [];
+var usernames = {};
 app.use(basicAuth({
     users: { "admin": "!blanquer666_2!" },
     challenge: true
@@ -75,6 +76,7 @@ io.on("connection", (client) => {
 
     client.on("login", (username) => {
         usernames[client] = username;
+        users.push(username);
         log("[" + getCurrentTime() + '] "' + username + '" is connected');
     });
 
@@ -89,7 +91,12 @@ io.on("connection", (client) => {
         log("[" + getCurrentTime() + '] Event "' + event + '" was triggered');
     });
 
+    client.on("ask-users", (client) => {
+        io.emit("send-users", users)
+    });
+    
 });
+
 
 server.listen(3000, () => {
     log("[" + getCurrentTime() + '] Server started on port 3000');
