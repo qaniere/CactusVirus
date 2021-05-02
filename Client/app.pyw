@@ -3,9 +3,9 @@ import socket
 import getpass
 import winsound
 import subprocess
-from vendor import gtts
-from vendor import playsound
-from vendor import socketio
+import gtts
+import playsound
+import socketio
 
 io = socketio.Client()
 username = getpass.getuser() + "@" + socket.gethostname()
