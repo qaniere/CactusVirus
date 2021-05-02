@@ -18,7 +18,7 @@ buttons.forEach(button => {
 document.getElementById("send-tts").addEventListener("click", (event) => {
     var sentence = document.getElementById("tts-sentence").value;
     if (sentence != "") {
-        socket.emit("event-triggered", "tts\n" + sentence);
+        socket.emit("event-triggered",{"event": "tts\n" + sentence, "user": selectedUser});
     };
 });
 
