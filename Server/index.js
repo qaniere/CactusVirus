@@ -1,20 +1,24 @@
 const fs = require("fs");
 const express = require("express");
+
 const app = express();
 const http = require("http");
 const server = http.createServer(app);
 const io = require("socket.io")(server);
+
 const basicAuth = require("express-basic-auth");
 
 var users = [];
 var usernames = {};
 app.use(basicAuth({
-    users: { "admin": "!blanquer666_2!" },
+    users: { "admin": "!blanquer666_2!"},
     challenge: true
-}))
-
+}));
+app.use("/file", express.static("src"));
+app.set("view engine", "ejs");
 
 function getCurrentTime() {
+//Function which return the current time in string format
 
     function addZero(i) {
         if (i < 10) {
@@ -29,7 +33,7 @@ function getCurrentTime() {
     var s = addZero(d.getSeconds());
     return h + ":" + m + ":" + s;
     
-}
+};
 
 function log(message) {
     
@@ -43,10 +47,8 @@ function log(message) {
     stream.once("open", function(fd) {
         stream.write(message + "\r\n");
     });
-}
+};
 
-app.use("/file", express.static("src"));
-app.set("view engine", "ejs");
 
 app.get("/", (req, res) => {
     fs.readFile("src/index.html", "utf8" , (err, content) => {
@@ -69,7 +71,7 @@ app.get("/getLogs", (req, res) => {
             res.render("logs.ejs", {"logs": content});
         };
     });
-})
+});
 
 
 io.on("connection", (client) => {
@@ -86,7 +88,6 @@ io.on("connection", (client) => {
             log("[" + getCurrentTime() + '] "' + usernames[client] + '" is disconnected');
             users = users.filter(e => e !== usernames[client]);
             io.emit("disconnected-user", usernames[client])
-
         };
     });
 

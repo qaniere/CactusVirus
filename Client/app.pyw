@@ -20,7 +20,6 @@ flash_coucou = ["flash-jfp", "flash-blanquer", "flash-michel", "flash-jpk"]
 def event_triggered(data):
 
     print(data)
-
     if data["event"] in soundlist and data["user"] == username:
         winsound.PlaySound(soundbox_path + data["event"] + ".wav", winsound.SND_ASYNC)
     

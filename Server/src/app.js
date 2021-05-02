@@ -1,26 +1,28 @@
 var socket = io();
 var selectedUser = null;
-var buttons = document.querySelectorAll("button")
 
+window.addEventListener("DOMContentLoaded", (event) => {
+    socket.emit("ask-users", "Hello server, who is connected ?");
+});
+
+
+var buttons = document.querySelectorAll("button");
 buttons.forEach(button => {  
-     
-    if(button.id != "send-tts") {
+    if(button.id != "send-tts") { //Do not select TTS button because it has it own listener
         button.addEventListener("click", (event) => {
             socket.emit("event-triggered", {"event": event.path[0].id, "user": selectedUser});
         });
-    }
+    };
 });
 
 document.getElementById("send-tts").addEventListener("click", (event) => {
     var sentence = document.getElementById("tts-sentence").value;
     if (sentence != "") {
         socket.emit("event-triggered", "tts\n" + sentence);
-    }
+    };
 });
 
-window.addEventListener("DOMContentLoaded", (event) => {
-    socket.emit("ask-users", "c kiki k la ??")
-});
+
 
 socket.on("send-users", (usernames) => {
     
@@ -33,7 +35,7 @@ socket.on("send-users", (usernames) => {
             newButton.innerHTML = user;
             newButton.id = user;
             newButton.addEventListener("click", (event) => {
-                selectedUser = event.path[0].id
+                selectedUser = event.path[0].id;
                 document.getElementById("controls").style.visibility = "visible";
             });
             document.getElementById("computer-zone").appendChild(newButton);
@@ -47,7 +49,7 @@ socket.on("new-user", (username) => {
     newButton.id = username;
     document.getElementById("no-computer").innerHTML = "";
     newButton.addEventListener("click", (event) => {
-        selectedUser = event.path[0].id
+        selectedUser = event.path[0].id;
         document.getElementById("controls").style.visibility = "visible";
         document.getElementById("selected-computer").innerHTML = selectedUser;
     });
