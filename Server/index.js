@@ -77,17 +77,17 @@ app.get("/getLogs", (req, res) => {
 io.on("connection", (client) => {
 
     client.on("login", (username) => {
-        usernames[client] = username;
+        usernames[client.id] = username;
         users.push(username);
         log("[" + getCurrentTime() + '] "' + username + '" is connected');
         io.emit("new-user", username);
     });
 
     client.on("disconnect", () => {
-        if(usernames[client] != undefined) {
-            log("[" + getCurrentTime() + '] "' + usernames[client] + '" is disconnected');
-            users = users.filter(e => e !== usernames[client]);
-            io.emit("disconnected-user", usernames[client])
+        if(usernames[client.id] != undefined) {
+            log("[" + getCurrentTime() + '] "' + usernames[client.id] + '" is disconnected');
+            io.emit("disconnected-user", usernames[client.id]);
+            delete usernames[client.id];
         };
     });
 

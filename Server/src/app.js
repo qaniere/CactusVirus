@@ -1,5 +1,6 @@
 var socket = io();
 var selectedUser = null;
+var alreadyAdded = false;
 
 window.addEventListener("DOMContentLoaded", (event) => {
     socket.emit("ask-users", "Hello server, who is connected ?");
@@ -26,20 +27,24 @@ document.getElementById("send-tts").addEventListener("click", (event) => {
 
 socket.on("send-users", (usernames) => {
     
-    if(usernames[0] != undefined) {
-        document.getElementById("no-computer").innerHTML = "";
+    if (!alreadyAdded) {
+        if(usernames[0] != undefined) {
+            document.getElementById("no-computer").innerHTML = "";
+        };
+    
+        usernames.forEach(user => {
+                let newButton = document.createElement("button");
+                newButton.innerHTML = user;
+                newButton.id = user;
+                newButton.addEventListener("click", (event) => {
+                    selectedUser = event.path[0].id;
+                    document.getElementById("controls").style.visibility = "visible";
+                    document.getElementById("selected-computer").innerHTML = selectedUser;
+                });
+                document.getElementById("computer-zone").appendChild(newButton);
+        });
+        alreadyAdded = true;
     };
-
-    usernames.forEach(user => {
-            let newButton = document.createElement("button");
-            newButton.innerHTML = user;
-            newButton.id = user;
-            newButton.addEventListener("click", (event) => {
-                selectedUser = event.path[0].id;
-                document.getElementById("controls").style.visibility = "visible";
-            });
-            document.getElementById("computer-zone").appendChild(newButton);
-    });
 });
 
 socket.on("new-user", (username) => {
