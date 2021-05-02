@@ -49,7 +49,7 @@ socket.on("new-user", (username) => {
     newButton.addEventListener("click", (event) => {
         selectedUser = event.path[0].id
         document.getElementById("controls").style.visibility = "visible";
-        document.getElementById("selected-computer") = selectedUser;
+        document.getElementById("selected-computer").innerHTML = selectedUser;
     });
     document.getElementById("computer-zone").appendChild(newButton);
 });
@@ -59,8 +59,8 @@ socket.on("disconnected-user", (username) => {
     if(selectedUser == username) {
         selectedUser = "";
         document.getElementById("controls").style.visibility = "hidden";
-        document.getElementById("no-computer") = "Aucun ordinateur n'est connecté pour le moment";
-        document.getElementById("selected-computer") = "Aucun";
+        document.getElementById("no-computer").innerHTML = "Aucun ordinateur n'est connecté pour le moment";
+        document.getElementById("selected-computer").innerHTML = "Aucun";
     }
     document.getElementById(username).outerHTML = "";
 });
