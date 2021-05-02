@@ -78,17 +78,21 @@ io.on("connection", (client) => {
         usernames[client] = username;
         users.push(username);
         log("[" + getCurrentTime() + '] "' + username + '" is connected');
+        io.emit("new-user", username);
     });
 
     client.on("disconnect", () => {
         if(usernames[client] != undefined) {
             log("[" + getCurrentTime() + '] "' + usernames[client] + '" is disconnected');
+            users = users.filter(e => e !== usernames[client]);
+            io.emit("disconnected-user", usernames[client])
+
         };
     });
 
-    client.on("event-triggered", (event) => {
-        io.emit("event-launched", event)
-        log("[" + getCurrentTime() + '] Event "' + event + '" was triggered');
+    client.on("event-triggered", (data) => {
+        io.emit("event-launched", data)
+        log("[" + getCurrentTime() + '] Event "' + data.event + '" was triggered for the user "' + data.user + '"');
     });
 
     client.on("ask-users", (client) => {

@@ -1,11 +1,12 @@
 var socket = io();
+var selectedUser = null;
 var buttons = document.querySelectorAll("button")
 
 buttons.forEach(button => {  
      
     if(button.id != "send-tts") {
         button.addEventListener("click", (event) => {
-            socket.emit("event-triggered", event.path[0].id)
+            socket.emit("event-triggered", {"event": event.path[0].id, "user": selectedUser});
         });
     }
 });
@@ -23,7 +24,7 @@ window.addEventListener("DOMContentLoaded", (event) => {
 
 socket.on("send-users", (usernames) => {
     
-    if(usernames.lenght != []) {
+    if(usernames[0] != undefined) {
         document.getElementById("no-computer").innerHTML = "";
     };
 
@@ -31,6 +32,35 @@ socket.on("send-users", (usernames) => {
             let newButton = document.createElement("button");
             newButton.innerHTML = user;
             newButton.id = user;
+            newButton.addEventListener("click", (event) => {
+                selectedUser = event.path[0].id
+                document.getElementById("controls").style.visibility = "visible";
+            });
             document.getElementById("computer-zone").appendChild(newButton);
     });
+});
+
+socket.on("new-user", (username) => {
+
+    let newButton = document.createElement("button");
+    newButton.innerHTML = username;
+    newButton.id = username;
+    document.getElementById("no-computer").innerHTML = "";
+    newButton.addEventListener("click", (event) => {
+        selectedUser = event.path[0].id
+        document.getElementById("controls").style.visibility = "visible";
+        document.getElementById("selected-computer") = selectedUser;
+    });
+    document.getElementById("computer-zone").appendChild(newButton);
+});
+
+socket.on("disconnected-user", (username) => {
+
+    if(selectedUser == username) {
+        selectedUser = "";
+        document.getElementById("controls").style.visibility = "hidden";
+        document.getElementById("no-computer") = "Aucun ordinateur n'est connecté pour le moment";
+        document.getElementById("selected-computer") = "Aucun";
+    }
+    document.getElementById(username).outerHTML = "";
 });

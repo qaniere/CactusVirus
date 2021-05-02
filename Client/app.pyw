@@ -17,29 +17,29 @@ soundlist = ["nopal-earrape", "passe-partout", "rene-ballek", "tabarnak", "wii-s
 flash_coucou = ["flash-jfp", "flash-blanquer", "flash-michel", "flash-jpk"]
 
 @io.on("event-launched")
-def event_triggered(event):
+def event_triggered(data):
 
-    print(event)
+    print(data)
 
-    if event in soundlist:
-        winsound.PlaySound(soundbox_path + event + ".wav", winsound.SND_ASYNC)
+    if data["event"] in soundlist and data["user"] == username:
+        winsound.PlaySound(soundbox_path + data["event"] + ".wav", winsound.SND_ASYNC)
     
-    elif event == "stop":
+    elif data["event"] == "stop" and data["user"] == username:
         winsound.PlaySound(None, winsound.SND_PURGE)
 
-    elif event == "spawn":
+    elif data["event"] == "spawn" and data["user"] == username:
         DETACHED_PROCESS = 0x00000008
         subprocess.call(goose_path + "GooseDesktop.exe", creationflags=DETACHED_PROCESS)
 
-    elif event == "kill":
+    elif data["event"] == "kill" and data["user"] == username:
         os.system("taskkill/f /im goosedesktop.exe")
 
-    elif event in flash_coucou:
+    elif data["event"] in flash_coucou and data["user"] == username:
         DETACHED_PROCESS = 0x00000008
-        subprocess.call(f"python {flash_path}\FlashCoucou.pyw {flash_path} {event}", creationflags=DETACHED_PROCESS)
+        subprocess.call(f"python {flash_path}\FlashCoucou.pyw {flash_path} {data['event']}", creationflags=DETACHED_PROCESS)
 
-    elif "tts\n" in event:
-        sentence = event.split("\n")[1]
+    elif "tts\n" in data["event"] and data["user"] == username:
+        sentence = data["event"].split("\n")[1]
         tts = gTTS(sentence, lang="fr")
         tts.save("sentence.mp3")
         playsound.playsound("sentence.mp3")
