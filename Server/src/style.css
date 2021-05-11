@@ -16,10 +16,14 @@ h2 {
 }
 
 button {
+    font-size: 2.5vh;
     margin-right: 0.5vw;
+    margin-bottom: 1vh;
 }
 
+
 #menu-zone {
+    font-size: 2.5vh;
     width: 75vw;
     height: 65vh;
     padding: 5vh;
@@ -28,7 +32,16 @@ button {
     background-color: white;
 }
 
-#form {
+#tts-sentence {
+    font-size: 2.5vh;
+    width: 35vw;
+}
+
+#controls {
     visibility: hidden;
-    margin-top: 5vh;
+}
+
+
+.zone {
+    margin-bottom: 1.5vh;
 }

@@ -1,1 +1,4 @@
 Server/node_modules
+__pycache__
+Server/logs.log
+Client/dist
