@@ -45,5 +45,5 @@ def event_triggered(data):
         os.remove("sentence.mp3")
 
 
-io.connect("http://localhost:3000")
+io.connect("https://cactusvirus.quentinaniere.repl.co/:3000")
 io.emit("login", username)
